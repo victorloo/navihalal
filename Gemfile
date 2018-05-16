@@ -63,3 +63,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # add halal gem here!
 gem 'devise'
+
+gem 'carrierwave'
