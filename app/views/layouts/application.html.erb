@@ -10,6 +10,77 @@
   </head>
 
   <body>
+    <!-- 套用Bootstrap 4的navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+      <%= link_to root_path do %>
+        <%#= image_tag "wall.jpg", class: "rounded-circle avatar-navi" %>
+      <% end %>
+      <a class="navbar-brand" href="<%= root_path %>">NaviHalal</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <%#= link_to "Feed", feeds_posts_path, class: "nav-link"%>
+          </li>
+          <li class="nav-item">
+            <%#= link_to "All Post", root_path, class: "nav-link"%>
+          </li>
+          <li class="nav-item">
+            <%#= link_to "New Post", new_post_path, class: "nav-link"%>
+          </li>
+        </ul>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <% if current_user %>
+           <li><%= link_to '修改密碼', edit_user_registration_path, class: "nav-link" %></li>
+
+            <% if current_user.admin? %>
+              <li><%= link_to 'Admin', admin_users_path, class: "nav-link" %></li>
+            <% end %>
+
+            <li><%= link_to '登出', destroy_user_session_path, method: :delete, class: "nav-link" %></li>
+
+            <%= link_to(user_path(current_user)) do %>
+              <div class="avatar-navi">
+                <%= image_tag current_user.avatar.url, class: "img-fluid rounded" %>
+              </div>
+            <% end %>
+
+            
+          <% else %>
+
+            <li><%= link_to '登入', new_user_session_path, class: "nav-link" %></li>
+
+          <% end %>
+
+        </ul>
+        <!-- <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form> -->
+      </div>
+    </nav>
+
+    
+
+    <% if flash[:notice] %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert"><%= notice %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <% elsif flash[:alert] %>
+      <div class="alert alert-danger"><%= alert %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <% end %>
+    
     <%= yield %>
   </body>
 </html>
