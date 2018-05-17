@@ -69,3 +69,11 @@ gem 'carrierwave'
 gem 'ffaker'
 
 gem 'kaminari'
+
+gem 'bootstrap'
+# gem 'font-awesome-rails' # add icon with font-awesome, but only fa
+gem 'font-awesome-sass' # add icon with font-awesome, has fa and fas and far
+gem 'jquery-rails'
+gem 'sprockets-rails'
+
+gem 'bootstrap4-kaminari-views'
