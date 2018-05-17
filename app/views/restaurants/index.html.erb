@@ -25,7 +25,7 @@
       <tr>
         <td><%= restaurant.name %></td>
         <td><%= restaurant.intro %></td>
-        <td><%= restaurant.photo %></td>
+        <td><%= image_tag restaurant.photo.url, width:'300px' %></td>
         <td><%= restaurant.open_hour %></td>
         <td><%= restaurant.close_hour %></td>
         <td><%= restaurant.address %></td>
