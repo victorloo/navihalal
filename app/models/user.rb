@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
   mount_uploader :photo, PhotoUploader
 
+  after_validation :default_photo
+  
   def admin?
     self.role == "admin"
   end
