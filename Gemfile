@@ -77,3 +77,8 @@ gem 'jquery-rails'
 gem 'sprockets-rails'
 
 gem 'bootstrap4-kaminari-views'
+
+# google map
+gem 'gmaps4rails'
+gem 'geocoder'
+gem 'gon'

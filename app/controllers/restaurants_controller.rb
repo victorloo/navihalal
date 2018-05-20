@@ -6,6 +6,10 @@ class RestaurantsController < ApplicationController
   # GET /restaurants.json
   def index
     @restaurants = Restaurant.all
+    @hash = Gmaps4rails.build_markers(@restaurants) do |restaurant, marker|
+      marker.lat restaurant.latitude
+      marker.lng restaurant.longitude
+    end
   end
 
   # GET /restaurants/1
@@ -70,6 +74,6 @@ class RestaurantsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def restaurant_params
-    params.require(:restaurant).permit(:name, :intro, :photo, :open_hour, :close_hour, :address, :tel, :viewed_count, :user_id, :lat, :lon)
+    params.require(:restaurant).permit(:name, :intro, :photo, :open_hour, :close_hour, :address, :tel, :viewed_count, :user_id, :latitude, :longitube)
   end
 end
