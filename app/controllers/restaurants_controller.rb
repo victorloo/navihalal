@@ -1,5 +1,5 @@
 class RestaurantsController < ApplicationController
-  before_action :authenticate_user!, except: :index
+  before_action :authenticate_user!, except: [:index, :search]
   before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
 
   # GET /restaurants
@@ -63,6 +63,17 @@ class RestaurantsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to restaurants_url, notice: 'Restaurant was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def search
+    @restaurants = Restaurant.ransack(name_cont: params[:q]).result(distinct: true)
+    
+    respond_to do |format|
+      format.html {}
+      format.json {
+        @restaurants = @restaurants.limit(5)
+      }
     end
   end
 
