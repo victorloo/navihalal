@@ -49,11 +49,84 @@
 
 <%= link_to 'New Restaurant', new_restaurant_path %>
 
+
+  <!-- restaurant marker Modal -->
+  <div class="modal modal-style fade" id="siteModalCenter" tabindex="-1" role="dialog" aria-labelledby="siteModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title text-center" id="siteModalLongTitle"></h3>
+        </div>
+        <div class="modal-body">
+          <div>
+            <img id="siteModal-img" alt="Site Photo" width="600" height="600" class="border rounded">
+          </div>
+          <div id="siteModal-content" style="font-size: 14px;" class="text-center"></div>
+          <div id="siteModal-disdur" style="font-size: 14px;" class="text-center"></div>
+          <div id="siteModal-availableTime" style="font-size: 14px;" class="text-center"></div>
+        </div>
+        <div class="modal-footer">
+          <div class="col-xs-4 col-xs-offset-1 text-center" >
+            <a id="siteModal-checkin" style="font-size: 16px;  padding: 8px; width:100px;" class="" rel="nofollow"></a>
+          </div>
+          <div class="col-xs-5 col-xs-offset-2 text-center">
+            <a id="siteModal-directionurl" style=" font-size: 16px; padding: 10px 35px;" class="btn btn-sm btn-main-1-outline" href="" target="_blank">***導航***</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script type='text/javascript'>
-  handler = Gmaps.build('Google');
+
+
+  var handler = Gmaps.build('Google');
   handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+    markers = <%= raw @hash.to_json %>
+    var restaurants = <%=raw @restaurants.to_json %>;
+    Gmaps.store = {}
+    Gmaps.store.markers = markers.map(function(m) {
+      marker = handler.addMarker(m);
+      marker.serviceObject.set('id', m.id);
+      marker.serviceObject.set('intro', m.intro);
+      //marker.serviceObject.set('infowindow', m.infowindow);
+      //console.log(m)
+      return marker;
+    });
+    handler.bounds.extendWith(Gmaps.store.markers);
+    handler.fitMapToBounds(); //some PC can't work fine if don't mask this code
+    //handler.getMap().setCenter(new google.maps.LatLng(35.720969, 139.735877));
+    handler.getMap().setZoom(2);
+    //console.log(Gmaps.store.markers);
+    for (var i = 0; i < Gmaps.store.markers.length; i++) {
+      google.maps.event.addListener(Gmaps.store.markers[i].serviceObject, 'click', function(e) {
+
+        console.log(this.id);
+        console.log(this.title);
+        console.log(this.intro);
+        //alert("Hello! I am an alert box!!");
+        //alert(Gmaps.store.markers[i].serviceObject.id);
+
+
+        document.getElementById('siteModalLongTitle').innerHTML = this.title;
+        //document.getElementById('siteModal-img').src = Photo;
+        document.getElementById('siteModal-content').innerHTML = this.intro;
+        $('#siteModalCenter').modal();
+      });
+    }
+  });
+
+
+  if(0){
+    handler = Gmaps.build('Google');
+    handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
     markers = handler.addMarkers(<%=raw @hash.to_json %>);
     handler.bounds.extendWith(markers);
     handler.fitMapToBounds();
-  });
+    });
+  }
+
 </script>
