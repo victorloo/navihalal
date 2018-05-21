@@ -9,6 +9,9 @@ class RestaurantsController < ApplicationController
     @hash = Gmaps4rails.build_markers(@restaurants) do |restaurant, marker|
       marker.lat restaurant.latitude
       marker.lng restaurant.longitude
+      marker.title restaurant.name
+      marker.json({ :id => restaurant.id })
+      marker.json({ :intro => restaurant.intro })
     end
   end
 
