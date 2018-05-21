@@ -68,6 +68,13 @@ class RestaurantsController < ApplicationController
 
   def search
     @restaurants = Restaurant.ransack(name_cont: params[:q]).result(distinct: true)
+    
+    respond_to do |format|
+      format.html {}
+      format.json {
+        @restaurants = @restaurants.limit(5)
+      }
+    end
   end
 
   private
