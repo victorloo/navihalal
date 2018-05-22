@@ -81,8 +81,6 @@
   </div>
 
 <script type='text/javascript'>
-
-
   var handler = Gmaps.build('Google');
   handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
     markers = <%= raw @hash.to_json %>
@@ -103,15 +101,11 @@
     //console.log(Gmaps.store.markers);
     for (var i = 0; i < Gmaps.store.markers.length; i++) {
       google.maps.event.addListener(Gmaps.store.markers[i].serviceObject, 'click', function(e) {
-
         console.log(this.id);
         console.log(this.title);
         console.log(this.intro);
-        //alert("Hello! I am an alert box!!");
-        //alert(Gmaps.store.markers[i].serviceObject.id);
-
-
-        document.getElementById('siteModalLongTitle').innerHTML = this.title;
+        //document.getElementById('siteModalLongTitle').innerHTML = this.title;
+        document.getElementById("siteModalLongTitle").innerHTML += "<a href=/restaurants/"+this.id+">"+ this.title + "</a>";
         //document.getElementById('siteModal-img').src = Photo;
         document.getElementById('siteModal-content').innerHTML = this.intro;
         $('#siteModalCenter').modal();
@@ -119,14 +113,5 @@
     }
   });
 
-
-  if(0){
-    handler = Gmaps.build('Google');
-    handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
-    markers = handler.addMarkers(<%=raw @hash.to_json %>);
-    handler.bounds.extendWith(markers);
-    handler.fitMapToBounds();
-    });
-  }
 
 </script>
