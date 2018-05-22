@@ -62,7 +62,8 @@
         </div>
         <div class="modal-body">
           <div>
-            <img id="siteModal-img" alt="Site Photo" width="600" height="600" class="border rounded">
+            <!-- <img id="siteModal-img" alt="Site Photo" width="600" height="600" class="border rounded"> -->
+            <img id="siteModal-img" alt="Site Photo" width="420" class="border rounded">
           </div>
           <div id="siteModal-content" style="font-size: 14px;" class="text-center"></div>
           <div id="siteModal-disdur" style="font-size: 14px;" class="text-center"></div>
@@ -90,7 +91,8 @@
       marker = handler.addMarker(m);
       marker.serviceObject.set('id', m.id);
       marker.serviceObject.set('intro', m.intro);
-      //marker.serviceObject.set('infowindow', m.infowindow);
+      marker.serviceObject.set('photo', m.photo);
+      marker.serviceObject.set('infowindow', m.infowindow);
       //console.log(m)
       return marker;
     });
@@ -99,14 +101,27 @@
     //handler.getMap().setCenter(new google.maps.LatLng(35.720969, 139.735877));
     handler.getMap().setZoom(2);
     //console.log(Gmaps.store.markers);
+    if(0){
+      $.each(Gmaps.store.markers, function() {
+        //if (this.serviceObject.id == id) {
+         console.log(this.serviceObject)
+          infowindow = new google.maps.InfoWindow({
+            content: this.serviceObject.infowindow
+          });
+          infowindow.open(this.serviceObject.map, this.serviceObject);
+        //}
+      });
+    }
+
+
     for (var i = 0; i < Gmaps.store.markers.length; i++) {
       google.maps.event.addListener(Gmaps.store.markers[i].serviceObject, 'click', function(e) {
         console.log(this.id);
         console.log(this.title);
         console.log(this.intro);
-        //document.getElementById('siteModalLongTitle').innerHTML = this.title;
+        console.log(this.photo);
         document.getElementById("siteModalLongTitle").innerHTML += "<a href=/restaurants/"+this.id+">"+ this.title + "</a>";
-        //document.getElementById('siteModal-img').src = Photo;
+        document.getElementById('siteModal-img').src = this.photo;
         document.getElementById('siteModal-content').innerHTML = this.intro;
         $('#siteModalCenter').modal();
       });

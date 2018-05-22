@@ -10,8 +10,10 @@ class RestaurantsController < ApplicationController
       marker.lat restaurant.latitude
       marker.lng restaurant.longitude
       marker.title restaurant.name
+      marker.infowindow restaurant.name
       marker.json({ :id => restaurant.id })
       marker.json({ :intro => restaurant.intro })
+      marker.json({ :photo => request.protocol + request.host_with_port + restaurant.photo.url })
     end
   end
 
