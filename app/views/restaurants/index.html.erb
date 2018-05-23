@@ -82,7 +82,8 @@
   </div>
 
 <script type='text/javascript'>
-  var anycGeo = true;
+  var noninfiniteGeo = true;
+  var useDefaultCenter = true;
   var handler = null; //google map handler
   var restaurantMap = {};
   var userCurrentPos = {
@@ -178,7 +179,6 @@
     markers = <%= raw @hash.to_json %>
     var restaurants = <%=raw @restaurants.to_json %>;
     for (var i = 0; i < restaurants.length; i++) {
-        console.log(restaurants[i])
         restaurantMap[restaurants[i].id] = restaurants[i];
     }
     Gmaps.store = {}
@@ -195,10 +195,17 @@
     //handler.fitMapToBounds(); //some PC can't work fine if don't mask this code
     //handler.getMap().setCenter(new google.maps.LatLng(35.720969, 139.735877));
 
-    handler.getMap().setZoom(2);
+    if(useDefaultCenter){
+      handler.getMap().setCenter(new google.maps.LatLng(22.997234, 120.211936)); //台南火車站
+      handler.getMap().setZoom(12);
+    }
+    else{
+      handler.getMap().setZoom(2);
+    }
+
 
     if(navigator.geolocation){
-      if(anycGeo){
+      if(noninfiniteGeo){
         getUserCurrentPosition();
       }
       else{
