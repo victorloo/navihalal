@@ -82,6 +82,8 @@
   </div>
 
 <script type='text/javascript'>
+  var anycGeo = true;
+  var handler = null;
   var userCurrentPos = {
     lat: 0.0,
     lng: 0.0
@@ -89,13 +91,13 @@
 
   var ha_options = {
     enableHighAccuracy: true,
-    timeout: 2500,
+    timeout: 5000,
     maximumAge: 0
   };
 
   var la_options = {
     enableHighAccuracy: false,
-    timeout: 2500,
+    timeout: 5000,
     maximumAge: 0
   };
 
@@ -114,12 +116,18 @@
     return false;
   }
 
+  function setCenter_byUserPos(){
+    handler.getMap().setCenter(new google.maps.LatLng(userCurrentPos.lat, userCurrentPos.lng));
+    handler.getMap().setZoom(14);
+  }
+
   function displayGcpErrorMsg(err){
     console.warn('ERROR(' + err.code + '): ' + err.message);
   }
 
-  function gcp_success(pos) {
+  function geo_success(pos) {
     setCurrentPos(pos);
+    setCenter_byUserPos();
   };
 
   function getUserCurrentPosition(){
@@ -127,12 +135,16 @@
       displayGcpErrorMsg(err);
     };
 
-    function gcp_error(err) {
+    function geo_error(err) {
       displayGcpErrorMsg(err);
-      navigator.geolocation.getCurrentPosition(gcp_success, error, la_options);
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(gcp_success, error, la_options);
+      }
     };
 
-    navigator.geolocation.getCurrentPosition(gcp_success, gcp_error, ha_options);
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(geo_success, geo_error, ha_options);
+    }
   };
 
   function displayOnMap(position){
@@ -143,7 +155,7 @@
     handler.map.centerOn(marker);
   };
 
-  var handler = Gmaps.build('Google');
+  handler = Gmaps.build('Google');
   handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
     markers = <%= raw @hash.to_json %>
     var restaurants = <%=raw @restaurants.to_json %>;
@@ -161,23 +173,16 @@
     //handler.fitMapToBounds(); //some PC can't work fine if don't mask this code
     //handler.getMap().setCenter(new google.maps.LatLng(35.720969, 139.735877));
 
-    if(0){
-      getUserCurrentPosition();
-      if(hasUserCurrentPos()){
-        handler.getMap().setCenter(new google.maps.LatLng(userCurrentPos.lat, userCurrentPos.lng));
-        handler.getMap().setZoom(10);
-      }else{
-        handler.getMap().setZoom(2);
-      }
-    }
     handler.getMap().setZoom(2);
 
     if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(displayOnMap);
-      handler.getMap().setZoom(14);
-      console.log("---------------- geolocaion ----------------");
-    }else{
-      handler.getMap().setZoom(2);
+      if(anycGeo){
+        getUserCurrentPosition();
+      }
+      else{
+          navigator.geolocation.getCurrentPosition(displayOnMap);
+          handler.getMap().setZoom(14);
+      }
     }
 
     //console.log(Gmaps.store.markers);
