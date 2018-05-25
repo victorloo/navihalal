@@ -82,3 +82,6 @@ gem 'bootstrap4-kaminari-views'
 gem 'gmaps4rails'
 gem 'geocoder'
 gem 'gon'
+
+# gem for search
+gem 'ransack', '~> 1.8', '>= 1.8.8'
